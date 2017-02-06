@@ -1,0 +1,30 @@
+{% extends "base.html"%}
+
+{% block content %}
+
+<h1>New Post</h1>
+
+<form method="post">
+  <label>
+    <div>title</div>
+    <input type="text" name="title">
+      {% if title %}
+        <input type="hidden" name="title" value="{{title}}">
+      {% endif %}
+  </label>
+
+  <label>
+    <div>post</div>
+    <textarea name="body" value="{{body}}">
+      {% if body %}
+        <input type="hidden" name="body" value="{{body}}">
+      {% endif %}
+  </label>
+
+
+
+  <button>Submit</button>
+
+</form>
+
+{% endblock %}
