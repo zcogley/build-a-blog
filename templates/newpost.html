@@ -15,13 +15,13 @@
 
   <label>
     <div>post</div>
-    <textarea name="body" value="{{body}}">
+    <textarea name="body" value="{{body}}"></textarea>
       {% if body %}
         <input type="hidden" name="body" value="{{body}}">
       {% endif %}
   </label>
 
-
+  <div class="error">{{error}}</div>
 
   <button>Submit</button>
 
