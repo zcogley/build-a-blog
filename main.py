@@ -20,11 +20,11 @@ class Blog(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
 
 class BlogHandler(webapp2.RequestHandler):
-    blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
-
     def get(self):
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
+
         t = jinja_env.get_template("blog.html")
-        content = t.render(title=title, body=body, blogs=blogs)
+        content = t.render(blogs=blogs)
         self.response.write(content)
 
 class PostHandler(webapp2.RequestHandler):
@@ -45,12 +45,27 @@ class PostHandler(webapp2.RequestHandler):
         else:
             b = Blog(title = title, body = body)
             b.put()
-            self.redirect("/blog")
 
+            # blog = Blog.get_by_id(int(blog_id))
+            t = jinja_env.get_template("blog_detail.html")
+            content = t.render(blog = b)
+            self.response.write(content)
+
+            # self.redirect("/blog/blog_detail.html")
+
+class BlogDetail(webapp2.RequestHandler):
+    def get(self, blog_id):
+        blog = Blog.get_by_id((blog_id))
+        if not blog:
+            self.renderError(404)
+        t = jinja_env.get_template("blog_detail.html")
+        content = t.render(blog = blog)
+        self.response.write(content)
 
 
 app = webapp2.WSGIApplication([
     ('/', Index),
     ('/blog', BlogHandler),
-    ('/newpost', PostHandler)
+    ('/newpost', PostHandler),
+    webapp2.Route('/blog/<blog_id:\d+>', BlogDetail),
 ], debug=True)
