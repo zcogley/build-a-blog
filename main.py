@@ -21,7 +21,7 @@ class Blog(db.Model):
 
 class BlogHandler(webapp2.RequestHandler):
     def get(self):
-        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
+        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
 
         t = jinja_env.get_template("blog.html")
         content = t.render(blogs=blogs)
@@ -46,12 +46,9 @@ class PostHandler(webapp2.RequestHandler):
             b = Blog(title = title, body = body)
             b.put()
 
-            # blog = Blog.get_by_id(int(blog_id))
             t = jinja_env.get_template("blog_detail.html")
             content = t.render(blog = b)
             self.response.write(content)
-
-            # self.redirect("/blog/blog_detail.html")
 
 class BlogDetail(webapp2.RequestHandler):
     def get(self, blog_id):
