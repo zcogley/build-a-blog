@@ -2,6 +2,8 @@
 
 {% block content %}
 
+  <input type="hidden" name="page" value="{{page}}">
+
 {% for blog in blogs %}
   <h2>
     <a href="/blog/post.key().id()">{{blog.title}}</a>
@@ -11,8 +13,5 @@
   </p>
 {% endfor %}
 
-<h4>
-    <a href="/newpost">New Post</a>
-</h4>
 
 {% endblock %}

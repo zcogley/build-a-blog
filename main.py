@@ -8,6 +8,10 @@ from google.appengine.ext import db
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
+def get_posts(limit, offset):
+    posts = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT {} OFFSET {}".format(limit, offset))
+    return posts
+
 class Index(webapp2.RequestHandler):
     def get(self):
         t = jinja_env.get_template("base.html")
@@ -15,24 +19,31 @@ class Index(webapp2.RequestHandler):
         self.response.write(content)
 
 class Blog(db.Model):
+    # creates the Blog database with title, body, and created fields
     title = db.StringProperty(required = True)
     body = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
 
 class BlogHandler(webapp2.RequestHandler):
+    # handles requests coming in to /blog
     def get(self):
-        blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 5")
+        # page = self.request.get("page")
+
+        blogs = get_posts(5, 0)
 
         t = jinja_env.get_template("blog.html")
         content = t.render(blogs=blogs)
         self.response.write(content)
 
 class PostHandler(webapp2.RequestHandler):
+    # handles requests coming in to /newpost
     def get(self):
         t = jinja_env.get_template("newpost.html")
         content = t.render()
         self.response.write(content)
 
+    # writes the title, body, and created date/time to blog DB,
+    # redirects to detail of blog entry
     def post(self):
         title = self.request.get("title")
         body = self.request.get("body")
@@ -51,6 +62,7 @@ class PostHandler(webapp2.RequestHandler):
             self.response.write(content)
 
 class BlogDetail(webapp2.RequestHandler):
+    # handles requests for individual blog entries
     def get(self, blog_id):
         blog = Blog.get_by_id((blog_id))
         if not blog:
