@@ -64,7 +64,7 @@ class PostHandler(webapp2.RequestHandler):
 class BlogDetail(webapp2.RequestHandler):
     # handles requests for individual blog entries
     def get(self, blog_id):
-        blog = Blog.get_by_id((blog_id))
+        blog = Blog.get_by_id(int(blog_id))
         if not blog:
             self.renderError(404)
         t = jinja_env.get_template("blog_detail.html")

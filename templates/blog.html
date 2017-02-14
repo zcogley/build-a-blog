@@ -2,11 +2,11 @@
 
 {% block content %}
 
-  <input type="hidden" name="page" value="{{page}}">
+  <input type="hidden" name="title" value="{{title}}">
 
 {% for blog in blogs %}
   <h2>
-    <a href="/blog/post.key().id()">{{blog.title}}</a>
+    <a href="/blog/{{blog.key().id()}}">{{blog.title}}</a>
   </h2>
   <p>
     {{blog.body}}
