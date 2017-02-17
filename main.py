@@ -51,7 +51,7 @@ class PostHandler(webapp2.RequestHandler):
         if not title or not body:
             error = "Please include both a title and body text for your blog entry."
             t = jinja_env.get_template("newpost.html")
-            content = t.render(error=error)
+            content = t.render(title=title, body=body, error=error)
             self.response.write(content)
         else:
             b = Blog(title = title, body = body)

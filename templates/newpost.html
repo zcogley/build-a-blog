@@ -7,18 +7,12 @@
 <form method="post">
   <label>
     <div>title</div>
-    <input type="text" name="title">
-      {% if title %}
-        <input type="hidden" name="title" value="{{title}}">
-      {% endif %}
+    <input type="text" name="title" value="{{title}}">
   </label>
 
   <label>
     <div>post</div>
-    <textarea name="body" value="{{body}}"></textarea>
-      {% if body %}
-        <input type="hidden" name="body" value="{{body}}">
-      {% endif %}
+    <textarea name="body">{{body}}</textarea>
   </label>
 
   <div class="error">{{error}}</div>
